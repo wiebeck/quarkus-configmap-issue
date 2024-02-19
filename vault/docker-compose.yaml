@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  vault:
+    image: hashicorp/vault
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "myroot"
+    cap_add:
+      - IPC_LOCK
+
+  prepopulate:
+    image: alpine/curl
+    depends_on:
+      - vault
+    volumes:
+      - ./prepopulate:/prepopulate
+    command:
+      - /bin/sh
+      - -c
+      - |
+        chmod u+x /prepopulate/prepopulate.sh
+        /prepopulate/prepopulate.sh
