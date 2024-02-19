@@ -2,7 +2,7 @@
 
 # About
 
-This repo demonstrates the following issue. Imagine your app config (or parts of it) are stored in a HashiCorp Vault cluster. Your app is able to connect and authenticate against Vault, policies are set up correctly and you are able to access the secrets.
+This repo demonstrates the following issue. Imagine your app config (or parts of it) is stored in a HashiCorp Vault server. Your app is able to connect and authenticate against Vault, policies are set up correctly and you are able to access the secrets.
 
 Now you want to use an interface class annotated with `@ConfigMapping` in your app. Furthermore your config shall be kind of dynamic and not limited to static properties, so your config class might look something like this (of course heavily simplfied):
 
@@ -28,11 +28,11 @@ mycfg.y.value=e
 mycfg.z.value=f
 ```
 
-So we have multiple "inner configs" with different values each. The `innerConfigs` map would have a size of 3. As long as we specifiy these properties in a **properties file** everything is **working as expected**.
+So we have multiple "inner configs" with different values each. The `innerConfigs` map would have a size of 3 in the above case. As long as we specifiy these properties in a **properties file** everything is **working as expected**.
 
 If we store these properties in **Vault** however the `innerConfigs` map **won't get initialized** (size 0) although Quarkus (read: the Quarkus Vault client) was **perfectly able to read the secrets**.
 
-We can even add some other (static) config properties to the `MyConfig` class and they would return the expected values from Vault. The issue seems to be related to the `Map`.
+We can even add some other (static) config properties to the `MyConfig` class and they would return the expected values from Vault. The issue seems to be related to the `Map` in combination with getting the config values from Vault (maybe other config sources as well).
 
 ## Project Structure
 
